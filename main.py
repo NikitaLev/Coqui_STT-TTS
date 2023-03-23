@@ -6,6 +6,8 @@ import threading
 import STT
 from fuzzywuzzy import fuzz
 
+import TTS_Coqui
+
 str_ex = 'the birch canoe slid on the smooth planks glue the sheet to the dark blue background it\'s easy to tell the ' \
          'depth of a well four hours of steady work faced us'
 
@@ -27,6 +29,7 @@ def coqui_test(file):
     print('orig   = ', str_ex)
     print('% = ', pr)
     print()
+    TTS_Coqui.test_TTS(1, res)
     return
 
 # Press the green button in the gutter to run the script.

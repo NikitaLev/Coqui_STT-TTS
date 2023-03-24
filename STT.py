@@ -22,9 +22,6 @@ except ImportError:
 
 wav_f = 'out.wav'
 
-str_ex = 'the birch canoe slid on the smooth planks glue the sheet to the dark blue background it\'s easy to tell the depth of a well four hours of steady work faced us'
-
-
 
 def convert_samplerate(audio_path, desired_sample_rate):
     sox_cmd = "sox {} --type raw --bits 16 --channels 1 --rate {} --encoding signed-integer --endian little --compression 0.0 --no-dither - ".format(
@@ -111,20 +108,20 @@ class VersionAction(argparse.Action):
         super(VersionAction, self).__init__(nargs=0, *args, **kwargs)
 
     def __call__(self, *args, **kwargs):
-        print("Coqui STT ", version())
+        #print("Coqui STT ", version())
         exit(0)
 
 #--model model_en.tflite --audio en_sample_1_16k.wav
 
 
 def coquiSTT(audio, model):
-    print("Loading model from file {}".format(model), file=sys.stderr)
+    #print("Loading model from file {}".format(model), file=sys.stderr)
     model_load_start = timer()
     # sphinx-doc: python_ref_model_start
     ds = Model(model)
     # sphinx-doc: python_ref_model_stop
     model_load_end = timer() - model_load_start
-    print("Loaded model in {:.3}s.".format(model_load_end), file=sys.stderr)
+    #print("Loaded model in {:.3}s.".format(model_load_end), file=sys.stderr)
 
 
     desired_sample_rate = ds.sampleRate()
@@ -133,12 +130,12 @@ def coquiSTT(audio, model):
     fin = wave.open(audio, "rb")
     fs_orig = fin.getframerate()
     if fs_orig != desired_sample_rate:
-        print(
+        """print(
             "Warning: original sample rate ({}) is different than {}hz. Resampling might produce erratic speech recognition.".format(
                 fs_orig, desired_sample_rate
             ),
             file=sys.stderr,
-        )
+        )"""
         fs_new, audio = convert_samplerate(audio, desired_sample_rate)
     else:
         audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
@@ -146,16 +143,16 @@ def coquiSTT(audio, model):
     audio_length = fin.getnframes() * (1 / fs_orig)
     fin.close()
 
-    print("Running inference.", file=sys.stderr)
+    #print("Running inference.", file=sys.stderr)
     inference_start = timer()
 
     res = ds.stt(audio)
 
     # sphinx-doc: python_ref_inference_stop
     inference_end = timer() - inference_start
-    print(
+    """    print(
         "Inference took %0.3fs for %0.3fs audio file." % (inference_end, audio_length),
         file=sys.stderr,
-    )
+    )"""
     return res
 

@@ -8,6 +8,6 @@ model_name = TTS.list_models()[0]
 tts = TTS(model_name)
 
 
-def test_TTS(count=0, example_text=''):
+def test_TTS(count, example_text=''):
     tts.tts_to_file(text=example_text, speaker=tts.speakers[0], language=tts.languages[0],
                     file_path="output" + str(count) + ".wav")
